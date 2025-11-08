@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <title>Birbank Giriş</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+      margin: 40px;
+    }
+    h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .phone-input {
+      margin-bottom: 5px;
+    }
+    .phone-input input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      outline: none;
+      font-size: 16px;
+    }
+    .country-code {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 20px;
+    }
+    .button {
+      width: 100%;
+      padding: 12px;
+      background-color: #d00000;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .terms {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+    }
+    .terms .blue {
+      color: #007bff;
+    }
+    .alert {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #d00000;
+    }
+  </style>
+</head>
+<body>
+  <h2>Başlamaq üçün mobil nömrənizi daxil edin</h2>
+  <div class="phone-input">
+    <input type="tel" id="phone" name="phone" placeholder="Telefon nömrəsi">
+  </div>
+  <div class="country-code">994+</div>
+  <button class="button" onclick="validatePhone()">Bir ID ilə davam et</button>
+  <div class="alert" id="alert">Zəhmət olmasa, əvvəlcə sahəni doldurun</div>
+  <p class="terms">
+    Davam etməklə, <span class="blue">Birbank istifadə şərtləri</span> və <span class="blue">Bir ID istifadə şərtləri</span> ilə razılaşıram
+  </p>
+
+  <script>
+    function validatePhone() {
+      const phoneInput = document.getElementById('phone');
+      const alertBox = document.getElementById('alert');
+      if (phoneInput.value.trim() === '') {
+        alertBox.style.display = 'block';
+        setTimeout(() => {
+          alertBox.style.display = 'none';
+        }, 2000);
+      } else {
+        localStorage.setItem("phone", phoneInput.value.trim()); // ✅ حفظ رقم الهاتف
+        window.location.href = "giris.html";
+      }
+    }
+  </script>
+</body>
+</html>
